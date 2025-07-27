@@ -1,20 +1,19 @@
-extends Node2D
-var delta = 1
+extends CharacterBody2D
+var bounds = Rect2(-50, -50, 950, 495)  # x, y, width, height (screen or level area)
 const SPEED = 200
 func _draw():
 	draw_circle(Vector2(100, 100), 50, Color.RED)
 	draw_rect(Rect2(150, 50, 100, 100), Color.BLUE)
 	draw_line(Vector2(50, 200), Vector2(200, 200), Color.GREEN, 3)
-func _process(delta):
-	var direction = Vector2.ZERO
+func _physics_process(delta):
+	var input_vector = Vector2(
+		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	).normalized()
 
-	if Input.is_action_pressed("ui_up"):
-		direction.y -= 1
-	if Input.is_action_pressed("ui_down"):
-		direction.y += 1
-	if Input.is_action_pressed("ui_left"):
-		direction.x -= 1
-	if Input.is_action_pressed("ui_right"):
-		direction.x += 1
-	direction = direction.normalized()
-	position += direction * SPEED * delta
+	velocity = input_vector * SPEED
+	move_and_slide()
+
+	# After movement, clamp position
+	position.x = clamp(position.x, bounds.position.x, bounds.position.x + bounds.size.x)
+	position.y = clamp(position.y, bounds.position.y, bounds.position.y + bounds.size.y)
