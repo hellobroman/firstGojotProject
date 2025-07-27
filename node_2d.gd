@@ -1,5 +1,5 @@
 extends CharacterBody2D
-var bounds = Rect2(-50, -50, 950, 495)  # x, y, width, height (screen or level area)
+var bounds = Rect2(-50, -50, 950, 497)  # x, y, width, height (screen or level area)
 const SPEED = 200
 func _draw():
 	draw_circle(Vector2(100, 100), 50, Color.RED)
